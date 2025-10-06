@@ -19,7 +19,7 @@ except KeyError:
 # openai.api_key = "YOUR_API_KEY"  # ← استبدليه بمفتاحك الحقيقي
 
 # 🧠 توليد أسئلة ذكية حسب المستوى
-from openai import OpenAI
+import openai
 
 def generate_questions(level, num_questions=5):
     prompt = f"""
@@ -29,9 +29,9 @@ def generate_questions(level, num_questions=5):
     مثال: [{{"q": "ما ترجمة كلمة 'apple'؟", "a": "تفاحة"}}, ...]
     """
 
-    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    client = openai(api_key=st.secrets["OPENAI_API_KEY"])
 
-    response = client.chat.completions.create(
+    response = openai.completions.create(
         model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7
