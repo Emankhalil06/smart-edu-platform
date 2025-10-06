@@ -26,18 +26,26 @@ def generate_questions(level, num_questions=5):
     صيغة الإخراج: قائمة من القواميس، كل سؤال يحتوي على 'q' للسؤال و 'a' للإجابة.
     مثال: [{{"q": "ما ترجمة كلمة 'apple'؟", "a": "تفاحة"}}, ...]
     """
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[{"role": "user", "content": prompt}],
-        temperature=0.7
-    )
-    content = response['choices'][0]['message']['content']
-    try:
-        questions = eval(content)
-        return questions
-    except:
-        st.error("فشل في توليد الأسئلة. يرجى المحاولة لاحقًا.")
-        return []
+#     from openai import OpenAI
+
+# client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+from openai import OpenAI
+
+client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[{"role": "user", "content": prompt}],
+    temperature=0.7
+ )
+content = response['choices'][0]['message']['content']
+# try:
+#      questions = eval(content)
+#     return questions
+# except:
+#         st.error("فشل في توليد الأسئلة. يرجى المحاولة لاحقًا.")
+#         return []
 
 # 🧼 تهيئة الجلسة
 if "page" not in st.session_state:
