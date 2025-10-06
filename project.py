@@ -2,7 +2,7 @@ import streamlit as st
 import pandas as pd
 import os
 import openai
-
+openai.api_key = st.secrets["OPENAI_API_KEY"]
 # 🔐 إعداد مفتاح OpenAI
 openai.api_key = "YOUR_API_KEY"  # ← استبدليه بمفتاحك الحقيقي
 
