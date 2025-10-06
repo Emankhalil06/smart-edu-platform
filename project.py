@@ -19,6 +19,8 @@ except KeyError:
 # openai.api_key = "YOUR_API_KEY"  # ← استبدليه بمفتاحك الحقيقي
 
 # 🧠 توليد أسئلة ذكية حسب المستوى
+from openai import OpenAI
+
 def generate_questions(level, num_questions=5):
     prompt = f"""
     أنشئ {num_questions} سؤالًا لتحديد مستوى اللغة الإنجليزية لطالب {level}.
@@ -26,20 +28,22 @@ def generate_questions(level, num_questions=5):
     صيغة الإخراج: قائمة من القواميس، كل سؤال يحتوي على 'q' للسؤال و 'a' للإجابة.
     مثال: [{{"q": "ما ترجمة كلمة 'apple'؟", "a": "تفاحة"}}, ...]
     """
-#     from openai import OpenAI
 
-# client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
+    client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
-from openai import OpenAI
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.7
+    )
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
-
-response = client.chat.completions.create(
-    model="gpt-3.5-turbo",
-    messages=[{"role": "user", "content": prompt}],
-    temperature=0.7
- )
-content = response['choices'][0]['message']['content']
+    content = response.choices[0].message.content
+    try:
+        questions = eval(content)
+        return questions
+    except:
+        st.error("فشل في توليد الأسئلة. يرجى المحاولة لاحقًا.")
+        return []
 # try:
 #      questions = eval(content)
 #     return questions
